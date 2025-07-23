@@ -3,7 +3,7 @@ import axios from 'axios';
 import Navbar from '../components/Navbar';
 
 const AddBook = () => {
-  const [form, setForm] = useState({ title: '', author: '', genre: '', description: '', image: '' });
+  const [form, setForm] = useState({ title: '', author: '', genre: '', description: '', image: '', price: '' });
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [uploadProgress, setUploadProgress] = useState(0);
@@ -54,11 +54,11 @@ const AddBook = () => {
       const token = localStorage.getItem('token');
       await axios.post(
         `${import.meta.env.VITE_API_URL || 'http://localhost:5000/api'}/books`,
-        { ...form, image: base64Image },
+        { ...form, image: base64Image, price: Number(form.price) },
         { headers: { Authorization: `Bearer ${token}` } }
       );
       setSuccess(true);
-      setForm({ title: '', author: '', genre: '', description: '', image: '' });
+      setForm({ title: '', author: '', genre: '', description: '', image: '', price: '' });
       setImageFile(null);
       setImagePreview(null);
       setUploadProgress(0);
@@ -106,6 +106,13 @@ const AddBook = () => {
           <div>
             <label htmlFor="genre" className="block mb-1 font-semibold text-purple-700 dark:text-purple-200">Genre</label>
             <input id="genre" name="genre" value={form.genre} onChange={handleChange} required placeholder="Genre" className="px-4 py-2 rounded-lg border border-purple-200 dark:border-purple-700/40 bg-white dark:bg-white/10 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-400 transition placeholder:text-purple-400 w-full" />
+          </div>
+          <div>
+            <label htmlFor="price" className="block mb-1 font-semibold text-purple-700 dark:text-purple-200">Price</label>
+            <div className="relative">
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-purple-400">₹</span>
+              <input id="price" name="price" value={form.price} onChange={handleChange} required type="number" min="0" step="0.01" placeholder="Price (in ₹)" className="pl-8 px-4 py-2 rounded-lg border border-purple-200 dark:border-purple-700/40 bg-white dark:bg-white/10 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-400 transition placeholder:text-purple-400 w-full" />
+            </div>
           </div>
           <div>
             <label htmlFor="description" className="block mb-1 font-semibold text-purple-700 dark:text-purple-200">Description</label>
