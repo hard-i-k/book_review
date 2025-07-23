@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Navbar from '../components/Navbar';
 import BookCard from '../components/BookCard';
+import { useBookRatings } from '../context/BookRatingsContext';
 
 const Books = () => {
   const [books, setBooks] = useState([]);
@@ -10,8 +11,10 @@ const Books = () => {
   const [search, setSearch] = useState('');
   const [genre, setGenre] = useState('');
   const [author, setAuthor] = useState('');
-  const [minPrice, setMinPrice] = useState('');
-  const [maxPrice, setMaxPrice] = useState('');
+  const [sortDate, setSortDate] = useState('date-desc');
+  const [sortPrice, setSortPrice] = useState('');
+  const [sortRating, setSortRating] = useState('');
+  const { ratings } = useBookRatings();
 
   useEffect(() => {
     const fetchBooks = async () => {
@@ -38,10 +41,49 @@ const Books = () => {
       book.genre.toLowerCase().includes(search.toLowerCase());
     const matchesGenre = genre ? book.genre === genre : true;
     const matchesAuthor = author ? book.author === author : true;
-    const matchesMinPrice = minPrice !== '' ? book.price >= parseFloat(minPrice) : true;
-    const matchesMaxPrice = maxPrice !== '' ? book.price <= parseFloat(maxPrice) : true;
-    return matchesSearch && matchesGenre && matchesAuthor && matchesMinPrice && matchesMaxPrice;
+    return matchesSearch && matchesGenre && matchesAuthor;
   });
+
+  // Sorting logic (only one sort active at a time)
+  let sortedBooks = [...filteredBooks];
+  if (sortRating) {
+    sortedBooks.sort((a, b) => {
+      const aRating = ratings[a._id]?.avgRating || 0;
+      const bRating = ratings[b._id]?.avgRating || 0;
+      if (sortRating === 'rating-desc') return bRating - aRating;
+      if (sortRating === 'rating-asc') return aRating - bRating;
+      return 0;
+    });
+  } else if (sortPrice) {
+    sortedBooks.sort((a, b) => {
+      if (sortPrice === 'price-asc') return a.price - b.price;
+      if (sortPrice === 'price-desc') return b.price - a.price;
+      return 0;
+    });
+  } else if (sortDate) {
+    sortedBooks.sort((a, b) => {
+      if (sortDate === 'date-desc') return new Date(b.createdAt) - new Date(a.createdAt);
+      if (sortDate === 'date-asc') return new Date(a.createdAt) - new Date(b.createdAt);
+      return 0;
+    });
+  }
+
+  // Ensure only one sort is active at a time
+  const handleSortDate = (e) => {
+    setSortDate(e.target.value);
+    setSortPrice('');
+    setSortRating('');
+  };
+  const handleSortPrice = (e) => {
+    setSortPrice(e.target.value);
+    setSortDate('');
+    setSortRating('');
+  };
+  const handleSortRating = (e) => {
+    setSortRating(e.target.value);
+    setSortDate('');
+    setSortPrice('');
+  };
 
   const handleDelete = (id) => {
     setBooks(books => books.filter(b => b._id !== id));
@@ -76,30 +118,42 @@ const Books = () => {
             <option value="">All Authors</option>
             {authors.map(a => <option key={a} value={a}>{a}</option>)}
           </select>
-          <input
-            type="number"
-            placeholder="Min Price"
-            value={minPrice}
-            onChange={e => setMinPrice(e.target.value)}
-            className="px-4 py-2 rounded-lg border border-purple-700/40 bg-white/10 text-white focus:outline-none focus:ring-2 focus:ring-purple-400 transition w-full md:w-1/12"
-          />
-          <input
-            type="number"
-            placeholder="Max Price"
-            value={maxPrice}
-            onChange={e => setMaxPrice(e.target.value)}
-            className="px-4 py-2 rounded-lg border border-purple-700/40 bg-white/10 text-white focus:outline-none focus:ring-2 focus:ring-purple-400 transition w-full md:w-1/12"
-          />
+          <select
+            value={sortDate}
+            onChange={handleSortDate}
+            className="px-4 py-2 rounded-lg border border-purple-700/40 bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-purple-400 transition w-full md:w-1/6"
+          >
+            <option value="date-desc">Newest First</option>
+            <option value="date-asc">Oldest First</option>
+          </select>
+          <select
+            value={sortPrice}
+            onChange={handleSortPrice}
+            className="px-4 py-2 rounded-lg border border-purple-700/40 bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-purple-400 transition w-full md:w-1/6"
+          >
+            <option value="">Sort by Price</option>
+            <option value="price-asc">Price: Low to High</option>
+            <option value="price-desc">Price: High to Low</option>
+          </select>
+          <select
+            value={sortRating}
+            onChange={handleSortRating}
+            className="px-4 py-2 rounded-lg border border-purple-700/40 bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-purple-400 transition w-full md:w-1/6"
+          >
+            <option value="">Sort by Rating</option>
+            <option value="rating-desc">Highest Rated</option>
+            <option value="rating-asc">Lowest Rated</option>
+          </select>
         </div>
         {loading ? (
           <div className="text-center text-purple-200">Loading...</div>
         ) : error ? (
           <div className="text-center text-red-400">{error}</div>
-        ) : filteredBooks.length === 0 ? (
+        ) : sortedBooks.length === 0 ? (
           <div className="text-center text-purple-200">No books found.</div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-            {filteredBooks.map((book) => (
+            {sortedBooks.map((book) => (
               <BookCard key={book._id} book={book} onDelete={handleDelete} />
             ))}
           </div>
