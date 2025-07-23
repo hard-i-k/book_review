@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { login as loginApi } from '../api/auth';
+import { HiOutlineExclamationCircle, HiOutlineCheckCircle, HiOutlineLockClosed } from 'react-icons/hi';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -25,27 +26,30 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#181c2f] via-[#2d2250] to-[#0f0c29] animate-fadeIn relative overflow-hidden text-white dark">
-      <div className="absolute inset-0 bg-gradient-to-tr from-purple-900/40 via-transparent to-blue-900/40 opacity-60 animate-gradientMove z-0" />
-      <form onSubmit={handleSubmit} className="relative z-10 backdrop-blur-md bg-white/10 shadow-2xl rounded-2xl px-10 py-8 w-full max-w-md flex flex-col gap-6 border border-purple-700/40 animate-slideIn">
-        <div className="flex flex-col items-center mb-2">
-          <h2 className="text-3xl font-bold text-purple-200 text-center">Login to BookReview</h2>
-          <p className="text-purple-300 text-sm mt-1">Welcome back! Please login to your account.</p>
-        </div>
-        {error && <div className="text-red-400 text-center text-sm">{error}</div>}
-        <div className="flex flex-col gap-2">
-          <label htmlFor="email" className="text-sm font-semibold text-purple-200">Email</label>
-          <input id="email" type="email" value={email} onChange={e => setEmail(e.target.value)} required className="px-4 py-2 rounded-lg border border-purple-700/40 bg-white/10 text-white focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-purple-400 transition placeholder:text-purple-300" placeholder="Enter your email" />
-        </div>
-        <div className="flex flex-col gap-2">
-          <label htmlFor="password" className="text-sm font-semibold text-purple-200">Password</label>
-          <input id="password" type="password" value={password} onChange={e => setPassword(e.target.value)} required className="px-4 py-2 rounded-lg border border-purple-700/40 bg-white/10 text-white focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-purple-400 transition placeholder:text-purple-300" placeholder="Enter your password" />
-        </div>
-        <button type="submit" disabled={loading} className="bg-gradient-to-r from-purple-600 to-blue-500 text-white py-2 rounded-lg font-semibold shadow-lg hover:scale-105 hover:from-blue-500 hover:to-purple-600 transition-all duration-200 focus:ring-2 focus:ring-purple-400 focus:ring-offset-2 disabled:opacity-60 disabled:cursor-not-allowed">
-          {loading ? 'Logging in...' : 'Login'}
-        </button>
-        <p className="text-center text-purple-300 text-sm mt-2">Don't have an account? <Link to="/signup" className="text-purple-200 font-semibold hover:underline">Sign Up</Link></p>
-      </form>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-800 animate-fadeIn relative overflow-hidden text-slate-100 dark">
+      <div className="absolute inset-0 bg-gradient-to-tr from-indigo-900/40 via-transparent to-violet-900/40 opacity-60 animate-gradientMove z-0" />
+      <div className="w-full max-w-md mx-auto z-10">
+        <form onSubmit={handleSubmit} className="backdrop-blur-md bg-slate-800/90 shadow-2xl rounded-2xl px-8 py-10 flex flex-col gap-6 border border-indigo-800/40 animate-slideIn">
+          <div className="flex flex-col items-center mb-2">
+            <h2 className="text-3xl font-bold text-indigo-200 text-center">Login to ReviewShelf</h2>
+            <p className="text-indigo-300 text-sm mt-1">Welcome back! Please login to your account.</p>
+          </div>
+          {error && <div className="flex items-center gap-2 text-red-400 text-sm"><HiOutlineExclamationCircle className="w-5 h-5" />{error}</div>}
+          <div className="flex flex-col gap-2">
+            <label htmlFor="email" className="text-sm font-semibold text-indigo-200">Email</label>
+            <input id="email" type="email" value={email} onChange={e => setEmail(e.target.value)} required className="w-full px-4 py-3 rounded-xl border border-indigo-800/40 bg-slate-900/60 text-slate-100 shadow focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 transition placeholder:text-indigo-300" placeholder="Enter your email" />
+          </div>
+          <div className="flex flex-col gap-2">
+            <label htmlFor="password" className="text-sm font-semibold text-indigo-200">Password</label>
+            <input id="password" type="password" value={password} onChange={e => setPassword(e.target.value)} required className="w-full px-4 py-3 rounded-xl border border-indigo-800/40 bg-slate-900/60 text-slate-100 shadow focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 transition placeholder:text-indigo-300" placeholder="Enter your password" />
+          </div>
+          <button type="submit" disabled={loading} className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-indigo-600 to-violet-700 text-slate-100 py-3 rounded-xl font-semibold shadow-lg hover:scale-105 hover:from-violet-700 hover:to-indigo-600 transition-all duration-200 focus:ring-2 focus:ring-indigo-400 focus:ring-offset-2 disabled:opacity-60 disabled:cursor-not-allowed group">
+            <HiOutlineLockClosed className={`w-5 h-5 transition-transform duration-200 group-hover:scale-110 ${loading ? 'animate-spin' : ''}`} />
+            {loading ? 'Logging in...' : 'Login'}
+          </button>
+          <p className="text-center text-indigo-300 text-sm mt-2">Don't have an account? <Link to="/signup" className="text-indigo-200 font-semibold hover:underline">Sign Up</Link></p>
+        </form>
+      </div>
     </div>
   );
 };

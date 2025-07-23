@@ -90,22 +90,22 @@ const Books = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#181c2f] via-[#2d2250] to-[#0f0c29] text-white dark">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-800 text-slate-100 dark">
       <Navbar />
       <div className="max-w-6xl mx-auto py-10 px-4 pt-20">
-        <h2 className="text-3xl font-bold mb-8">All Books</h2>
-        <div className="sticky top-0 z-10 bg-[#181c2f]/80 dark:bg-[#181c2f]/80 backdrop-blur-md rounded-xl shadow-lg flex flex-col md:flex-row md:items-end gap-4 mb-8 p-4">
+        <h2 className="text-3xl font-bold mb-8 text-indigo-200">All Books</h2>
+        <div className="sticky top-0 z-10 bg-slate-900/80 dark:bg-slate-900/80 backdrop-blur-md rounded-xl shadow-lg flex flex-col md:flex-row md:items-end gap-4 mb-8 p-4 border border-indigo-800/40">
           <input
             type="text"
             placeholder="Search by title, author, or genre..."
             value={search}
             onChange={e => setSearch(e.target.value)}
-            className="px-4 py-2 rounded-lg border border-purple-700/40 bg-white/10 text-white focus:outline-none focus:ring-2 focus:ring-purple-400 transition placeholder:text-purple-300 w-full md:w-1/3"
+            className="px-4 py-2 rounded-lg border border-indigo-800/40 bg-slate-800/60 text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-400 transition placeholder:text-indigo-300 w-full md:w-1/3"
           />
           <select
             value={genre}
             onChange={e => setGenre(e.target.value)}
-            className="px-4 py-2 rounded-lg border border-purple-700/40 bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-purple-400 transition w-full md:w-1/6"
+            className="px-4 py-2 rounded-lg border border-indigo-800/40 bg-slate-800/60 text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-400 transition w-full md:w-1/6"
           >
             <option value="">All Genres</option>
             {genres.map(g => <option key={g} value={g}>{g}</option>)}
@@ -113,7 +113,7 @@ const Books = () => {
           <select
             value={author}
             onChange={e => setAuthor(e.target.value)}
-            className="px-4 py-2 rounded-lg border border-purple-700/40 bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-purple-400 transition w-full md:w-1/6"
+            className="px-4 py-2 rounded-lg border border-indigo-800/40 bg-slate-800/60 text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-400 transition w-full md:w-1/6"
           >
             <option value="">All Authors</option>
             {authors.map(a => <option key={a} value={a}>{a}</option>)}
@@ -121,7 +121,7 @@ const Books = () => {
           <select
             value={sortDate}
             onChange={handleSortDate}
-            className="px-4 py-2 rounded-lg border border-purple-700/40 bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-purple-400 transition w-full md:w-1/6"
+            className="px-4 py-2 rounded-lg border border-indigo-800/40 bg-slate-800/60 text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-400 transition w-full md:w-1/6"
           >
             <option value="date-desc">Newest First</option>
             <option value="date-asc">Oldest First</option>
@@ -129,7 +129,7 @@ const Books = () => {
           <select
             value={sortPrice}
             onChange={handleSortPrice}
-            className="px-4 py-2 rounded-lg border border-purple-700/40 bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-purple-400 transition w-full md:w-1/6"
+            className="px-4 py-2 rounded-lg border border-indigo-800/40 bg-slate-800/60 text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-400 transition w-full md:w-1/6"
           >
             <option value="">Sort by Price</option>
             <option value="price-asc">Price: Low to High</option>
@@ -138,7 +138,7 @@ const Books = () => {
           <select
             value={sortRating}
             onChange={handleSortRating}
-            className="px-4 py-2 rounded-lg border border-purple-700/40 bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-purple-400 transition w-full md:w-1/6"
+            className="px-4 py-2 rounded-lg border border-indigo-800/40 bg-slate-800/60 text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-400 transition w-full md:w-1/6"
           >
             <option value="">Sort by Rating</option>
             <option value="rating-desc">Highest Rated</option>
@@ -146,11 +146,11 @@ const Books = () => {
           </select>
         </div>
         {loading ? (
-          <div className="text-center text-purple-200">Loading...</div>
+          <div className="text-center text-indigo-200">Loading...</div>
         ) : error ? (
           <div className="text-center text-red-400">{error}</div>
         ) : sortedBooks.length === 0 ? (
-          <div className="text-center text-purple-200">No books found.</div>
+          <div className="text-center text-indigo-200">No books found.</div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
             {sortedBooks.map((book) => (

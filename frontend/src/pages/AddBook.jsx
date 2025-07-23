@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react';
 import axios from 'axios';
 import Navbar from '../components/Navbar';
+import { HiOutlineExclamationCircle, HiOutlineCheckCircle, HiOutlineUpload } from 'react-icons/hi';
 
 const AddBook = () => {
   const [form, setForm] = useState({ title: '', author: '', genre: '', description: '', image: '', price: '' });
@@ -103,76 +104,84 @@ const AddBook = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-100 to-blue-100 text-gray-900 dark:bg-gradient-to-br dark:from-[#181c2f] dark:via-[#2d2250] dark:to-[#0f0c29] dark:text-white">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-800 text-slate-100 flex flex-col items-center justify-center dark">
       <Navbar />
-      <div className="flex flex-col items-center justify-center py-10 pt-20">
-        <h2 className="text-3xl font-bold mb-6 text-purple-700 dark:text-purple-200">Add a New Book</h2>
-        <form onSubmit={handleSubmit} className="bg-white/80 dark:bg-white/10 backdrop-blur-md shadow-xl rounded-2xl px-10 py-8 w-full max-w-lg flex flex-col gap-6 border border-purple-200 dark:border-purple-700/40">
-          {error && <div className="text-red-500 dark:text-red-400 text-center text-sm">{error}</div>}
-          {success && <div className="text-green-600 dark:text-green-400 text-center text-sm">Book added successfully!</div>}
-          <div>
-            <label htmlFor="title" className="block mb-1 font-semibold text-purple-700 dark:text-purple-200">Title</label>
-            <input id="title" name="title" value={form.title} onChange={handleChange} required placeholder="Title" className={`px-4 py-2 rounded-lg border ${fieldErrors.title ? 'border-red-400' : 'border-purple-200 dark:border-purple-700/40'} bg-white dark:bg-white/10 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-400 transition placeholder:text-purple-400 w-full`} />
-            {fieldErrors.title && <span className="text-red-400 text-xs mt-1">{fieldErrors.title}</span>}
-          </div>
-          <div>
-            <label htmlFor="author" className="block mb-1 font-semibold text-purple-700 dark:text-purple-200">Author</label>
-            <input id="author" name="author" value={form.author} onChange={handleChange} required placeholder="Author" className={`px-4 py-2 rounded-lg border ${fieldErrors.author ? 'border-red-400' : 'border-purple-200 dark:border-purple-700/40'} bg-white dark:bg-white/10 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-400 transition placeholder:text-purple-400 w-full`} />
-            {fieldErrors.author && <span className="text-red-400 text-xs mt-1">{fieldErrors.author}</span>}
-          </div>
-          <div>
-            <label htmlFor="genre" className="block mb-1 font-semibold text-purple-700 dark:text-purple-200">Genre</label>
-            <input id="genre" name="genre" value={form.genre} onChange={handleChange} required placeholder="Genre" className={`px-4 py-2 rounded-lg border ${fieldErrors.genre ? 'border-red-400' : 'border-purple-200 dark:border-purple-700/40'} bg-white dark:bg-white/10 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-400 transition placeholder:text-purple-400 w-full`} />
-            {fieldErrors.genre && <span className="text-red-400 text-xs mt-1">{fieldErrors.genre}</span>}
-          </div>
-          <div>
-            <label htmlFor="price" className="block mb-1 font-semibold text-purple-700 dark:text-purple-200">Price</label>
-            <div className="relative">
-              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-purple-400">₹</span>
-              <input id="price" name="price" value={form.price} onChange={handleChange} required type="number" min="0" step="0.01" placeholder="Price (in ₹)" className={`pl-8 px-4 py-2 rounded-lg border ${fieldErrors.price ? 'border-red-400' : 'border-purple-200 dark:border-purple-700/40'} bg-white dark:bg-white/10 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-400 transition placeholder:text-purple-400 w-full`} />
-            </div>
-            {fieldErrors.price && <span className="text-red-400 text-xs mt-1">{fieldErrors.price}</span>}
-          </div>
-          <div>
-            <label htmlFor="description" className="block mb-1 font-semibold text-purple-700 dark:text-purple-200">Description</label>
-            <textarea id="description" name="description" value={form.description} onChange={handleChange} required placeholder="Description" className={`px-4 py-2 rounded-lg border ${fieldErrors.description ? 'border-red-400' : 'border-purple-200 dark:border-purple-700/40'} bg-white dark:bg-white/10 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-400 transition placeholder:text-purple-400 resize-none min-h-[100px] w-full`} />
-            {fieldErrors.description && <span className="text-red-400 text-xs mt-1">{fieldErrors.description}</span>}
-          </div>
-          <div
-            className={`flex flex-col items-center justify-center border-2 border-dashed ${fieldErrors.image ? 'border-red-400' : 'border-purple-300 dark:border-purple-700/40'} rounded-lg p-6 bg-white/60 dark:bg-white/10 cursor-pointer hover:bg-purple-100/60 dark:hover:bg-purple-900/20 transition relative`}
-            onDrop={handleDrop}
-            onDragOver={handleDragOver}
-            onClick={() => fileInputRef.current.click()}
-          >
-            {imagePreview ? (
-              <img src={imagePreview} alt="Preview" className="w-32 h-48 object-cover rounded-lg mb-2 shadow" />
-            ) : (
-              <span className="text-purple-500 dark:text-purple-300 text-sm">Drag & drop book cover here, or click to select</span>
-            )}
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleFileInput}
-              ref={fileInputRef}
-              className="hidden"
-            />
-            {fieldErrors.image && <span className="text-red-400 text-xs mt-1">{fieldErrors.image}</span>}
-            {uploadProgress > 0 && uploadProgress < 100 && (
-              <div className="w-full mt-2">
-                <div className="h-2 bg-purple-200 dark:bg-purple-900/30 rounded-full overflow-hidden">
-                  <div
-                    className="h-2 bg-gradient-to-r from-purple-400 to-blue-400 dark:from-purple-600 dark:to-blue-500 rounded-full transition-all duration-200"
-                    style={{ width: `${uploadProgress}%` }}
-                  />
-                </div>
-                <div className="text-xs text-purple-500 dark:text-purple-300 mt-1 text-center">Uploading: {uploadProgress}%</div>
+      <div className="flex flex-col items-center justify-center py-10 pt-24 w-full">
+        <div className="w-full max-w-lg mx-auto">
+          <div className="bg-slate-800/90 backdrop-blur-md shadow-2xl rounded-2xl px-8 py-10 border border-indigo-800/40">
+            <h2 className="text-3xl font-bold mb-2 text-indigo-200 text-center">Add a New Book</h2>
+            <p className="text-indigo-300 text-center mb-6">Share your favorite reads with the community!</p>
+            <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+              {error && <div className="flex items-center gap-2 text-red-400 text-sm mb-2"><HiOutlineExclamationCircle className="w-5 h-5" />{error}</div>}
+              {success && <div className="flex items-center gap-2 text-green-400 text-sm mb-2"><HiOutlineCheckCircle className="w-5 h-5" />Book added successfully!</div>}
+              <div>
+                <label htmlFor="title" className="block mb-1 font-semibold text-indigo-200">Title</label>
+                <input id="title" name="title" value={form.title} onChange={handleChange} required placeholder="Title" className={`w-full px-4 py-3 rounded-xl border ${fieldErrors.title ? 'border-red-400' : 'border-indigo-800/40'} bg-slate-900/60 text-slate-100 shadow focus:outline-none focus:ring-2 focus:ring-indigo-400 transition placeholder:text-indigo-300`} />
+                {fieldErrors.title && <span className="flex items-center gap-1 text-red-400 text-xs mt-1"><HiOutlineExclamationCircle className="w-4 h-4" />{fieldErrors.title}</span>}
               </div>
-            )}
+              <div>
+                <label htmlFor="author" className="block mb-1 font-semibold text-indigo-200">Author</label>
+                <input id="author" name="author" value={form.author} onChange={handleChange} required placeholder="Author" className={`w-full px-4 py-3 rounded-xl border ${fieldErrors.author ? 'border-red-400' : 'border-indigo-800/40'} bg-slate-900/60 text-slate-100 shadow focus:outline-none focus:ring-2 focus:ring-indigo-400 transition placeholder:text-indigo-300`} />
+                {fieldErrors.author && <span className="flex items-center gap-1 text-red-400 text-xs mt-1"><HiOutlineExclamationCircle className="w-4 h-4" />{fieldErrors.author}</span>}
+              </div>
+              <div>
+                <label htmlFor="genre" className="block mb-1 font-semibold text-indigo-200">Genre</label>
+                <input id="genre" name="genre" value={form.genre} onChange={handleChange} required placeholder="Genre" className={`w-full px-4 py-3 rounded-xl border ${fieldErrors.genre ? 'border-red-400' : 'border-indigo-800/40'} bg-slate-900/60 text-slate-100 shadow focus:outline-none focus:ring-2 focus:ring-indigo-400 transition placeholder:text-indigo-300`} />
+                {fieldErrors.genre && <span className="flex items-center gap-1 text-red-400 text-xs mt-1"><HiOutlineExclamationCircle className="w-4 h-4" />{fieldErrors.genre}</span>}
+              </div>
+              <div>
+                <label htmlFor="price" className="block mb-1 font-semibold text-indigo-200">Price</label>
+                <div className="relative">
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-indigo-400">₹</span>
+                  <input id="price" name="price" value={form.price} onChange={handleChange} required type="number" min="0" step="0.01" placeholder="Price (in ₹)" className={`w-full pl-8 px-4 py-3 rounded-xl border ${fieldErrors.price ? 'border-red-400' : 'border-indigo-800/40'} bg-slate-900/60 text-slate-100 shadow focus:outline-none focus:ring-2 focus:ring-indigo-400 transition placeholder:text-indigo-300`} />
+                </div>
+                {fieldErrors.price && <span className="flex items-center gap-1 text-red-400 text-xs mt-1"><HiOutlineExclamationCircle className="w-4 h-4" />{fieldErrors.price}</span>}
+              </div>
+              <div>
+                <label htmlFor="description" className="block mb-1 font-semibold text-indigo-200">Description</label>
+                <textarea id="description" name="description" value={form.description} onChange={handleChange} required placeholder="Description" className={`w-full px-4 py-3 rounded-xl border ${fieldErrors.description ? 'border-red-400' : 'border-indigo-800/40'} bg-slate-900/60 text-slate-100 shadow focus:outline-none focus:ring-2 focus:ring-indigo-400 transition placeholder:text-indigo-300 resize-none min-h-[100px]`} />
+                {fieldErrors.description && <span className="flex items-center gap-1 text-red-400 text-xs mt-1"><HiOutlineExclamationCircle className="w-4 h-4" />{fieldErrors.description}</span>}
+              </div>
+              <div
+                className={`flex flex-col items-center justify-center border-2 border-dashed ${fieldErrors.image ? 'border-red-400' : 'border-indigo-400'} rounded-xl p-6 bg-slate-900/40 cursor-pointer hover:bg-indigo-900/30 transition relative group`}
+                onDrop={handleDrop}
+                onDragOver={handleDragOver}
+                onClick={() => fileInputRef.current.click()}
+                tabIndex={0}
+                aria-label="Upload book cover image"
+              >
+                {imagePreview ? (
+                  <img src={imagePreview} alt="Preview" className="w-32 h-48 object-cover rounded-lg mb-2 shadow" />
+                ) : (
+                  <span className="flex items-center gap-2 text-indigo-300 text-sm"><HiOutlineUpload className="w-5 h-5" />Drag & drop book cover here, or click to select</span>
+                )}
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleFileInput}
+                  ref={fileInputRef}
+                  className="hidden"
+                />
+                {fieldErrors.image && <span className="flex items-center gap-1 text-red-400 text-xs mt-1"><HiOutlineExclamationCircle className="w-4 h-4" />{fieldErrors.image}</span>}
+                {uploadProgress > 0 && uploadProgress < 100 && (
+                  <div className="w-full mt-2">
+                    <div className="h-2 bg-indigo-900/30 rounded-full overflow-hidden">
+                      <div
+                        className="h-2 bg-gradient-to-r from-indigo-400 to-violet-400 rounded-full transition-all duration-200"
+                        style={{ width: `${uploadProgress}%` }}
+                      />
+                    </div>
+                    <div className="text-xs text-indigo-300 mt-1 text-center">Uploading: {uploadProgress}%</div>
+                  </div>
+                )}
+              </div>
+              <button type="submit" disabled={loading} className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-indigo-600 to-violet-700 text-slate-100 py-3 rounded-xl font-semibold shadow-lg hover:scale-105 hover:from-violet-700 hover:to-indigo-600 transition-all duration-200 focus:ring-2 focus:ring-indigo-400 focus:ring-offset-2 disabled:opacity-60 disabled:cursor-not-allowed group">
+                <HiOutlineCheckCircle className={`w-5 h-5 transition-transform duration-200 group-hover:scale-110 ${loading ? 'animate-spin' : ''}`} />
+                {loading ? 'Adding...' : 'Add Book'}
+              </button>
+            </form>
           </div>
-          <button type="submit" disabled={loading} className="bg-gradient-to-r from-purple-500 to-blue-400 dark:from-purple-600 dark:to-blue-500 text-white py-2 rounded-lg font-semibold shadow-lg hover:scale-105 hover:from-blue-500 hover:to-purple-600 transition-all duration-200 focus:ring-2 focus:ring-purple-400 focus:ring-offset-2 disabled:opacity-60 disabled:cursor-not-allowed">
-            {loading ? 'Adding...' : 'Add Book'}
-          </button>
-        </form>
+        </div>
       </div>
     </div>
   );
