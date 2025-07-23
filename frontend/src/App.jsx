@@ -5,6 +5,7 @@ import Signup from './pages/Signup.jsx';
 import AddBook from './pages/AddBook.jsx';
 import Books from './pages/Books.jsx';
 import BookDetail from './pages/BookDetail.jsx';
+import Dashboard from './pages/Dashboard.jsx';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route path="/add-book" element={<AddBook />} />
         <Route path="/books" element={<Books />} />
         <Route path="/books/:id" element={<BookDetail />} />
+        <Route path="/dashboard" element={<Dashboard />} />
       </Routes>
     </Router>
   );

@@ -92,7 +92,7 @@ const Books = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#181c2f] via-[#2d2250] to-[#0f0c29] text-white dark">
       <Navbar />
-      <div className="max-w-6xl mx-auto py-10 px-4">
+      <div className="max-w-6xl mx-auto py-10 px-4 pt-20">
         <h2 className="text-3xl font-bold mb-8">All Books</h2>
         <div className="sticky top-0 z-10 bg-[#181c2f]/80 dark:bg-[#181c2f]/80 backdrop-blur-md rounded-xl shadow-lg flex flex-col md:flex-row md:items-end gap-4 mb-8 p-4">
           <input

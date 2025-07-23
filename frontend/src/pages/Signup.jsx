@@ -2,6 +2,9 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { signup as signupApi } from '../api/auth';
 
+const validateEmail = (email) => /\S+@\S+\.\S+/.test(email);
+const validatePassword = (password) => /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/.test(password);
+
 const Signup = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -9,13 +12,29 @@ const Signup = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
+  const [emailError, setEmailError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
     setError('');
     setSuccess(false);
+    let valid = true;
+    if (!validateEmail(email)) {
+      setEmailError('Please enter a valid email address.');
+      valid = false;
+    } else {
+      setEmailError('');
+    }
+    if (!validatePassword(password)) {
+      setPasswordError('Password must be at least 8 characters, include uppercase, lowercase, and a number.');
+      valid = false;
+    } else {
+      setPasswordError('');
+    }
+    if (!valid) return;
+    setLoading(true);
     try {
       await signupApi({ name, email, password });
       setSuccess(true);
@@ -39,19 +58,19 @@ const Signup = () => {
         {success && <div className="text-green-400 text-center text-sm">Signup successful! Redirecting...</div>}
         <div className="flex flex-col gap-2">
           <label htmlFor="name" className="text-sm font-semibold text-blue-200">Name</label>
-          <input id="name" type="text" value={name} onChange={e => setName(e.target.value)} required className="px-4 py-2 rounded-lg border border-blue-700/40 bg-white/10 text-white focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition placeholder:text-blue-300" placeholder="Enter your name" />
+          <input id="name" type="text" value={name} onChange={e => setName(e.target.value)} required className="px-4 py-2 rounded-lg border border-blue-700/40 bg-white/10 text-white focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition" placeholder="Enter your name" />
         </div>
         <div className="flex flex-col gap-2">
           <label htmlFor="email" className="text-sm font-semibold text-blue-200">Email</label>
-          <input id="email" type="email" value={email} onChange={e => setEmail(e.target.value)} required className="px-4 py-2 rounded-lg border border-blue-700/40 bg-white/10 text-white focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition placeholder:text-blue-300" placeholder="Enter your email" />
+          <input id="email" type="email" value={email} onChange={e => setEmail(e.target.value)} required className="px-4 py-2 rounded-lg border border-blue-700/40 bg-white/10 text-white focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition" placeholder="Enter your email" />
+          {emailError && <span className="text-red-400 text-xs mt-1">{emailError}</span>}
         </div>
         <div className="flex flex-col gap-2">
           <label htmlFor="password" className="text-sm font-semibold text-blue-200">Password</label>
-          <input id="password" type="password" value={password} onChange={e => setPassword(e.target.value)} required className="px-4 py-2 rounded-lg border border-blue-700/40 bg-white/10 text-white focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition placeholder:text-blue-300" placeholder="Enter your password" />
+          <input id="password" type="password" value={password} onChange={e => setPassword(e.target.value)} required className="px-4 py-2 rounded-lg border border-blue-700/40 bg-white/10 text-white focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition" placeholder="Enter your password" />
+          {passwordError && <span className="text-red-400 text-xs mt-1">{passwordError}</span>}
         </div>
-        <button type="submit" disabled={loading} className="bg-gradient-to-r from-blue-600 to-purple-500 text-white py-2 rounded-lg font-semibold shadow-lg hover:scale-105 hover:from-purple-500 hover:to-blue-600 transition-all duration-200 focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 disabled:opacity-60 disabled:cursor-not-allowed">
-          {loading ? 'Signing up...' : 'Sign Up'}
-        </button>
+        <button type="submit" disabled={loading} className="bg-gradient-to-r from-blue-600 to-purple-500 text-white py-2 rounded-lg font-semibold shadow-lg hover:scale-105 hover:from-purple-500 hover:to-blue-600 transition-all duration-200 focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 disabled:opacity-60 disabled:cursor-not-allowed">{loading ? 'Signing up...' : 'Sign Up'}</button>
         <p className="text-center text-blue-300 text-sm mt-2">Already have an account? <Link to="/login" className="text-blue-200 font-semibold hover:underline">Login</Link></p>
       </form>
     </div>

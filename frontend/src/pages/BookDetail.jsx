@@ -59,7 +59,7 @@ const BookDetail = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-100 to-blue-100 text-gray-900 dark:bg-gradient-to-br dark:from-[#181c2f] dark:via-[#2d2250] dark:to-[#0f0c29] dark:text-white">
       <Navbar />
-      <div className="max-w-6xl mx-auto py-10 px-4 flex flex-col md:flex-row gap-8">
+      <div className="max-w-6xl mx-auto py-10 px-4 flex flex-col md:flex-row gap-8 pt-20">
         {/* Left: Book details */}
         <div className="flex-1 bg-white/80 dark:bg-white/10 rounded-2xl shadow-xl p-8 flex flex-col items-center md:items-start">
           <img src={book.image} alt={book.title} className="w-40 h-60 object-cover rounded-lg shadow mb-4" />
