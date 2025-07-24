@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import axios from 'axios';
+import { getBookById, getBookAvgRating, getBookReviews } from '../api/books';
 import Navbar from '../components/Navbar';
 import StarRating from '../components/StarRating';
 import ReviewForm from '../components/ReviewForm';
@@ -18,8 +18,7 @@ const BookDetail = () => {
 
   const fetchBook = async () => {
     try {
-      const res = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000/api'}/books`);
-      const found = res.data.find((b) => b._id === id);
+      const found = await getBookById(id);
       setBook(found);
     } catch (err) {
       setError('Failed to fetch book.');
@@ -28,17 +27,17 @@ const BookDetail = () => {
 
   const fetchAvgRating = async () => {
     try {
-      const res = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000/api'}/reviews/${id}/average`);
-      setAvgRating(res.data.avgRating || 0);
-      setReviewCount(res.data.count || 0);
-      setRating(id, res.data.avgRating || 0, res.data.count || 0);
+      const data = await getBookAvgRating(id);
+      setAvgRating(data.avgRating || 0);
+      setReviewCount(data.count || 0);
+      setRating(id, data.avgRating || 0, data.count || 0);
     } catch {}
   };
 
   const fetchReviews = async () => {
     try {
-      const res = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000/api'}/reviews/${id}`);
-      setReviews(res.data);
+      const data = await getBookReviews(id);
+      setReviews(data);
     } catch {}
   };
 

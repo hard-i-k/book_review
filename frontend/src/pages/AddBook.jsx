@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react';
-import axios from 'axios';
+import { addBook } from '../api/books';
 import Navbar from '../components/Navbar';
 import { HiOutlineExclamationCircle, HiOutlineCheckCircle, HiOutlineUpload } from 'react-icons/hi';
 
@@ -67,11 +67,7 @@ const AddBook = () => {
         base64Image = await toBase64(imageFile, handleUploadProgress);
       }
       const token = localStorage.getItem('token');
-      await axios.post(
-        `${import.meta.env.VITE_API_URL || 'http://localhost:5000/api'}/books`,
-        { ...form, image: base64Image, price: Number(form.price) },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      await addBook({ ...form, image: base64Image, price: Number(form.price) }, token);
       setSuccess(true);
       setForm({ title: '', author: '', genre: '', description: '', image: '', price: '' });
       setImageFile(null);

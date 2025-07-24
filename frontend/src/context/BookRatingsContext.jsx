@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useCallback } from 'react';
-import axios from 'axios';
+import { getBookAvgRating } from '../api/reviews';
 
 const BookRatingsContext = createContext();
 
@@ -10,8 +10,8 @@ export const BookRatingsProvider = ({ children }) => {
 
   const fetchRating = useCallback(async (bookId) => {
     try {
-      const res = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000/api'}/reviews/${bookId}/average`);
-      setRatings(r => ({ ...r, [bookId]: { avgRating: res.data.avgRating || 0, reviewCount: res.data.count || 0 } }));
+      const data = await getBookAvgRating(bookId);
+      setRatings(r => ({ ...r, [bookId]: { avgRating: data.avgRating || 0, reviewCount: data.count || 0 } }));
     } catch {
       setRatings(r => ({ ...r, [bookId]: { avgRating: 0, reviewCount: 0 } }));
     }

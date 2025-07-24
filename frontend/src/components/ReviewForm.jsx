@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import axios from 'axios';
+import { addReview } from '../api/reviews';
 import StarRating from './StarRating';
 
 const ReviewForm = ({ bookId, onReviewAdded }) => {
@@ -17,11 +17,7 @@ const ReviewForm = ({ bookId, onReviewAdded }) => {
     setSuccess(false);
     try {
       const token = localStorage.getItem('token');
-      await axios.post(
-        `${import.meta.env.VITE_API_URL || 'http://localhost:5000/api'}/reviews/${bookId}`,
-        { rating, review_text: reviewText },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      await addReview(bookId, { rating, review_text: reviewText }, token);
       setSuccess(true);
       setRating(0);
       setReviewText('');
