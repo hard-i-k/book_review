@@ -95,7 +95,7 @@ Disabled buttons and friendly error toasts keep the UX smooth.
 ## Known Gaps
 
 * Images as Base64 will bloat the DB if covers are huge
-* No email verification or password reset… yet
+
 
 
 
