@@ -1,6 +1,3 @@
-Sure! Here's your updated README with the **Project Layout** section properly enclosed in a styled code block (box), while keeping the rest of the content exactly the same:
-
----
 
 # ReviewShelf
 
