@@ -56,9 +56,8 @@ ReviewShelf is a full‑stack book review platform built with React, Node.js/Exp
    ```bash
    npm install
    ```
-3. **Configure environment variables:**
-   - Copy `.env.example` to `.env` and set `VITE_API_URL` to your backend API root (e.g., `http://localhost:5000/api` or your Render URL).
-4. **Start the frontend development server:**
+
+3. **Start the frontend development server:**
    ```bash
    npm run dev
    ```
