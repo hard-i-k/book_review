@@ -25,4 +25,18 @@ app.use((err, req, res, next) => {
   res.status(500).json({ message: 'Server error.' });
 });
 
+const SELF_PING_URL = 'https://book-review-jkfz.onrender.com/'; 
+const SELF_PING_INTERVAL = 30000; 
+function selfPing() {
+  axios.get(SELF_PING_URL)
+    .then(response => {
+      console.log(`Self-ping at ${new Date().toISOString()}: Status ${response.status}`);
+    })
+    .catch(error => {
+      console.error(`Self-ping error at ${new Date().toISOString()}:`, error.message);
+    });
+}
+
+setInterval(selfPing, SELF_PING_INTERVAL);
+
 module.exports = app;
